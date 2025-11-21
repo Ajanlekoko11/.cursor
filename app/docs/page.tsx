@@ -365,7 +365,6 @@ export default function DocsPage() {
             </Button>
           </div>
           </AnimatedSection>
-        </div>
       </main>
 
       <Footer />
