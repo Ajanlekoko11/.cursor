@@ -131,6 +131,14 @@ export async function GET(request: NextRequest) {
       // Continue with default balance - don't block the request
     }
 
+    // Ensure user is defined (TypeScript guard)
+    if (!user) {
+      return NextResponse.json(
+        { error: 'User data not available' },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json({
       success: true,
       user: {
