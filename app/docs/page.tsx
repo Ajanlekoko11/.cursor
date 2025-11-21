@@ -165,6 +165,7 @@ export default function DocsPage() {
               </div>
             </div>
           </section>
+          </AnimatedSection>
 
           {/* Submitting Tips */}
           <AnimatedSection direction="up" delay={400}>
@@ -356,15 +357,16 @@ export default function DocsPage() {
           {/* CTA */}
           <AnimatedSection direction="fade" delay={900}>
             <div className="text-center mt-16">
-            <Button
-              asChild
-              size="lg"
-              className="bg-[#00FFB3] text-[#0F172A] hover:bg-[#00E6A3] text-lg px-8 py-6 font-semibold"
-            >
-              <Link href="/signup">Get Started</Link>
-            </Button>
-          </div>
+              <Button
+                asChild
+                size="lg"
+                className="bg-[#00FFB3] text-[#0F172A] hover:bg-[#00E6A3] text-lg px-8 py-6 font-semibold"
+              >
+                <Link href="/signup">Get Started</Link>
+              </Button>
+            </div>
           </AnimatedSection>
+        </div>
       </main>
 
       <Footer />
