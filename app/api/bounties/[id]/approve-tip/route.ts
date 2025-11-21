@@ -12,7 +12,7 @@ import bs58 from 'bs58';
 // POST - Approve a tip and send payment
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify session
@@ -36,7 +36,7 @@ export async function POST(
       );
     }
 
-    const bountyId = params.id;
+    const { id: bountyId } = await params;
     const { tipId, recipientWallet, recipientType, password } = await request.json();
 
     if (!tipId || !recipientWallet || !recipientType || !password) {

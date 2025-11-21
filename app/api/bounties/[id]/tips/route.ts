@@ -6,7 +6,7 @@ import { createServerClient } from '@/lib/supabase/client';
 // GET - Fetch all tips for a specific bounty (only accessible by bounty creator)
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify session
@@ -30,7 +30,7 @@ export async function GET(
       );
     }
 
-    const bountyId = params.id;
+    const { id: bountyId } = await params;
 
     // Verify user is the creator of this bounty
     const serverClient = createServerClient();
