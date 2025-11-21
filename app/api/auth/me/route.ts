@@ -56,6 +56,14 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Ensure connector is defined (TypeScript guard)
+    if (!connector) {
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable. Please try again.' },
+        { status: 503 }
+      );
+    }
+
     const session = connector.verifySession(sessionToken);
 
     if (!session) {
