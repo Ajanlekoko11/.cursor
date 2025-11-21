@@ -109,8 +109,19 @@ export default function Footer() {
           <p className="text-sm text-[#94A3B8]">
             © {new Date().getFullYear()} Whistle. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
             <span className="text-xs text-[#94A3B8]">100% Self-Custodial</span>
+            <span className="text-xs text-[#94A3B8]">
+              Powered by{' '}
+              <a
+                href="https://zero-connector.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#00FFB3] hover:text-[#00E6A3] transition-colors"
+              >
+                Zero Connector
+              </a>
+            </span>
           </div>
         </div>
       </div>

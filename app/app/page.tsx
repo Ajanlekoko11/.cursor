@@ -26,10 +26,22 @@ export default function DashboardPage() {
     fetchDashboardData();
   }, []);
 
-  const fetchDashboardData = async (retryCount = 0) => {
+  const fetchDashboardData = async (retryCount = 0, startTime = Date.now()) => {
+    const MAX_TIMEOUT = 60000; // 60 seconds
+    const MAX_RETRIES = 10; // Increased retries
+    
     try {
+      // Check if we've exceeded total timeout
+      const elapsed = Date.now() - startTime;
+      if (elapsed >= MAX_TIMEOUT) {
+        console.error('Dashboard fetch exceeded 60 second timeout');
+        setLoading(false);
+        return;
+      }
+      
       const response = await fetch('/api/auth/me', {
-        credentials: 'include', // Ensure cookies are sent with the request
+        credentials: 'include',
+        signal: AbortSignal.timeout(60000), // 60 second timeout
       });
       
       const data = await response.json();
@@ -37,39 +49,55 @@ export default function DashboardPage() {
       if (response.ok) {
         setUser(data.user);
         setBalance(data.balance);
-      } else {
-        console.error('Dashboard fetch error:', data.error);
-        
-        // Only redirect on clear authentication errors
-        // Retry on temporary errors (network issues, timeouts, etc.)
-        if (response.status === 401) {
-          const errorMsg = data.error?.toLowerCase() || '';
-          // Only redirect if it's a clear auth error, not a temporary issue
-          if (errorMsg.includes('invalid session') || 
-              errorMsg.includes('not authenticated') ||
-              errorMsg.includes('session expired')) {
+        setLoading(false);
+        return;
+      }
+      
+      console.error('Dashboard fetch error:', data.error);
+      
+      // Only redirect on clear authentication errors
+      if (response.status === 401) {
+        const errorMsg = data.error?.toLowerCase() || '';
+        // Only redirect if it's a clear auth error, not a temporary issue
+        if (errorMsg.includes('invalid session') || 
+            errorMsg.includes('not authenticated') ||
+            errorMsg.includes('session expired')) {
+          // Add delay before redirect to prevent race conditions
+          setTimeout(() => {
             window.location.href = '/login';
-            return;
-          }
-        }
-        
-        // Retry on server errors (500, 503) or temporary issues (0 = network error)
-        if ((response.status >= 500 || response.status === 503 || response.status === 0) && retryCount < 2) {
-          console.log(`Retrying dashboard fetch (attempt ${retryCount + 1})...`);
-          setTimeout(() => fetchDashboardData(retryCount + 1), 2000);
+          }, 1000);
           return;
         }
       }
+      
+      // Retry on server errors (500, 503) or temporary issues (0 = network error)
+      if ((response.status >= 500 || response.status === 503 || response.status === 0) && retryCount < MAX_RETRIES) {
+        const elapsed = Date.now() - startTime;
+        const remainingTime = MAX_TIMEOUT - elapsed;
+        
+        if (remainingTime > 0) {
+          // Exponential backoff with max delay
+          const delay = Math.min(2000 * Math.pow(1.5, retryCount), 10000);
+          console.log(`Retrying dashboard fetch (attempt ${retryCount + 1}/${MAX_RETRIES}) after ${delay}ms...`);
+          setTimeout(() => fetchDashboardData(retryCount + 1, startTime), delay);
+          return;
+        }
+      }
+      
+      setLoading(false);
     } catch (error: any) {
       console.error('Failed to fetch dashboard data:', error);
       
-      // Retry on network errors
-      if (retryCount < 2) {
-        console.log(`Retrying dashboard fetch after error (attempt ${retryCount + 1})...`);
-        setTimeout(() => fetchDashboardData(retryCount + 1), 2000);
+      // Retry on network errors if we haven't exceeded timeout
+      const elapsed = Date.now() - startTime;
+      if (elapsed < MAX_TIMEOUT && retryCount < MAX_RETRIES) {
+        // Exponential backoff with max delay
+        const delay = Math.min(2000 * Math.pow(1.5, retryCount), 10000);
+        console.log(`Retrying dashboard fetch after error (attempt ${retryCount + 1}/${MAX_RETRIES}) after ${delay}ms...`);
+        setTimeout(() => fetchDashboardData(retryCount + 1, startTime), delay);
         return;
       }
-    } finally {
+      
       setLoading(false);
     }
   };

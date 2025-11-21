@@ -1,0 +1,46 @@
+# Railway ignore file
+# Files and directories to exclude from Railway deployment
+
+# Development files
+.env.local
+.env.development
+.env.test
+
+# Build artifacts (Railway will rebuild)
+.next
+out
+dist
+build
+
+# Dependencies (will be installed by Railway)
+node_modules
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+coverage
+.nyc_output
+
+# Documentation (optional - remove if you want docs in deployment)
+README.md
+docs
+
+# Anchor program build artifacts (if not needed in production)
+target
+.anchor
+

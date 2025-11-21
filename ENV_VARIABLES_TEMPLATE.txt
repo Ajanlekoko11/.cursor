@@ -1,0 +1,68 @@
+# Railway Deployment Environment Variables Template
+# Copy these to Railway's Environment Variables section
+# Replace all placeholder values with your actual credentials
+
+# ============================================
+# SUPABASE CONFIGURATION (REQUIRED)
+# ============================================
+# Get these from: Supabase Dashboard → Settings → API
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# Get this from: Supabase Dashboard → Settings → Database → Connection string → URI
+DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.xxxxx.supabase.co:5432/postgres
+
+# ============================================
+# ZERO CONNECTOR CONFIGURATION (REQUIRED)
+# ============================================
+ZERO_CONNECTOR_NETWORK=mainnet-beta
+# OR for testing: ZERO_CONNECTOR_NETWORK=devnet
+
+# ============================================
+# SOLANA CONFIGURATION (REQUIRED)
+# ============================================
+NEXT_PUBLIC_SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+# OR use a custom RPC for better reliability:
+# NEXT_PUBLIC_SOLANA_RPC_URL=https://your-custom-rpc.com
+NEXT_PUBLIC_SOLANA_NETWORK=mainnet-beta
+
+# ============================================
+# ANCHOR PROGRAM (REQUIRED - after deployment)
+# ============================================
+NEXT_PUBLIC_ANCHOR_PROGRAM_ID=your_deployed_program_id_here
+# Deploy your Anchor program first, then add the program ID here
+
+# ============================================
+# IPFS / NFT.STORAGE (REQUIRED)
+# ============================================
+# Get this from: https://nft.storage → Create API Key
+NEXT_PUBLIC_NFT_STORAGE_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# ============================================
+# ADMIN CONFIGURATION (OPTIONAL)
+# ============================================
+# Only needed if you want admin features
+ADMIN_WALLET_ADDRESS=your_admin_wallet_address_here
+
+# ============================================
+# SESSION CONFIGURATION (REQUIRED)
+# ============================================
+# Generate random 32+ character strings for these:
+# Use: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+SESSION_SECRET=generate_random_32_character_string_here
+ENCRYPTION_KEY=generate_random_32_character_string_here
+SESSION_DURATION_DAYS=30
+
+# ============================================
+# APP CONFIGURATION (REQUIRED)
+# ============================================
+# Update this after Railway deployment with your actual domain
+NEXT_PUBLIC_APP_URL=https://your-app.railway.app
+# OR your custom domain: https://yourdomain.com
+
+# ============================================
+# NODE ENVIRONMENT (Railway sets automatically)
+# ============================================
+NODE_ENV=production
+
