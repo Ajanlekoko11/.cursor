@@ -44,6 +44,7 @@ declare module 'zero-connector' {
     getBalance(publicKey: string): Promise<{ balance: Balance }>;
     createWallet(options: { password: string }): Promise<{ publicKey: string; encryptedPrivateKey: string }>;
     initialize(): Promise<void>;
+    deleteSession(sessionToken: string): void | Promise<void>;
     storage?: PostgresAdapter;
   }
 }
