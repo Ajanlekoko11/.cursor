@@ -39,9 +39,10 @@ export async function POST(request: NextRequest) {
     // Create wallet with Zero Connector
     const walletResult = await connector.createWallet({ password });
 
-    if (!walletResult.success) {
+    // Remove the success check - createWallet returns { publicKey, encryptedPrivateKey } directly
+    if (!walletResult.publicKey) {
       return NextResponse.json(
-        { error: walletResult.message || 'Failed to create wallet' },
+        { error: 'Failed to create wallet' },
         { status: 500 }
       );
     }
